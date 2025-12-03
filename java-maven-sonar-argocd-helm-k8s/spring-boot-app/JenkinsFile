@@ -31,8 +31,8 @@ pipeline {
         # DOWNLOAD the SonarQube Maven plugin so Maven can run sonar:sonar
         mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:help
 
-        # RUN SonarQube Scan
-        mvn sonar:sonar \
+        # RUN SonarQube Scan - EXPLICITLY specify the plugin version to avoid Java 17 compatibility issues
+        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar \
           -Dsonar.login=$SONAR_AUTH_TOKEN \
           -Dsonar.host.url=$SONAR_URL
       '''
