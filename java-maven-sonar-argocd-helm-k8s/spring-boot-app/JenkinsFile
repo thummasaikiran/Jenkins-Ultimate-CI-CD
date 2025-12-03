@@ -2,20 +2,18 @@ pipeline {
   agent {
     docker {
       image 'abhishekf5/maven-abhishek-docker-agent:v1'
-      args '--user root -v /var/run/docker.sock:/var/run/docker.sock -v /home/jenkins/.m2:/root/.m2' // mount Docker socket to access the host's Docker daemon
+      args '--user root -v /var/run/docker.sock:/var/run/docker.sock -v /home/jenkins/.m2:/root/.m2'
     }
   }
   stages {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/iam-veeramalla/Jenkins-Zero-To-Hero.git'
       }
     }
     stage('Build and Test') {
       steps {
         sh 'ls -ltr'
-        // build the project and create a JAR file
         sh 'cd java-maven-sonar-argocd-helm-k8s/spring-boot-app && mvn clean package'
       }
     }
@@ -28,21 +26,18 @@ pipeline {
           sh '''
         cd java-maven-sonar-argocd-helm-k8s/spring-boot-app
 
-        # DOWNLOAD the SonarQube Maven plugin so Maven can run sonar:sonar
-        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:help
-
-        # RUN SonarQube Scan - EXPLICITLY specify the plugin version to avoid Java 17 compatibility issues
-        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.10.0.2594:sonar \
+        # Use a SonarQube Maven plugin version compatible with Java 11
+        # Version 3.9.1.2184 is confirmed to work with Java 11
+        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar \
           -Dsonar.login=$SONAR_AUTH_TOKEN \
           -Dsonar.host.url=$SONAR_URL
       '''
+        }
       }
     }
- }
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "abhishekf5/ultimate-cicd:${BUILD_NUMBER}"
-        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps {
