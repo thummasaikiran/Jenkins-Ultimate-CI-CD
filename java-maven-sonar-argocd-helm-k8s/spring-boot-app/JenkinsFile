@@ -28,7 +28,7 @@ pipeline {
 
         # Use a SonarQube Maven plugin version compatible with Java 11
         # Version 3.9.1.2184 is confirmed to work with Java 11
-        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.1.2184:sonar \
+        mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.8.0.2131:sonar \
           -Dsonar.login=$SONAR_AUTH_TOKEN \
           -Dsonar.host.url=$SONAR_URL
       '''
