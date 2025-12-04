@@ -32,7 +32,7 @@ pipeline {
             
             # Run SonarQube analysis
             mvn sonar:sonar \
-              -Dsonar.login=$SONAR_AUTH_TOKEN \
+              -Dsonar.token=$SONAR_AUTH_TOKEN \
               -Dsonar.host.url=$SONAR_URL \
               -Dsonar.projectKey=spring-boot-demo \
               -Dsonar.scanner.downloadAndInstall=false
